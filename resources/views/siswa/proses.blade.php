@@ -12,42 +12,40 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css" />
 
     <style>
- .bgb {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(0, 0, 0);
-    z-index: -1;
-}
+        .bgb {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0, 0, 0);
+            z-index: -1;
+        }
 
-.bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url(" {{ asset('assets/images/backgrounds/cloud-bg.jpg') }} ");
-    /* Ganti dengan URL gambar latar belakang yang diinginkan */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    opacity: 0.5;
-    /* Tetapkan background image */
-    z-index: -2;
-    /* Pastikan div background berada di latar belakang */
-}
-
-
+        .bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url(" {{ asset('assets/images/backgrounds/cloud-bg.jpg') }} ");
+            /* Ganti dengan URL gambar latar belakang yang diinginkan */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 0.5;
+            /* Tetapkan background image */
+            z-index: -2;
+            /* Pastikan div background berada di latar belakang */
+        }
     </style>
 </head>
 
 <body>
     <div class="bgb">
         <div class="bg"></div>
-      </div>
+    </div>
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
         data-sidebar-position="fixed" data-header-position="fixed">
@@ -83,27 +81,23 @@
                             <span class="hide-menu">Aktifitas</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./peminjaman" aria-expanded="false">
+                            <a class="sidebar-link" href="./proses" aria-expanded="false">
                                 <span>
                                     <i class="bi bi-journal-arrow-down"></i>
                                 </span>
                                 <span class="hide-menu">peminjaman</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./pengembalian" aria-expanded="false">
-                                <span>
-                                    <i class="bi bi-journal-arrow-up"></i>
-                                </span>
-                                <span class="hide-menu">Pengembalian</span>
-                            </a>
+                        <li class="nav-small-cap">
+                            <i class="bi bi-list nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">Personal</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./rating" aria-expanded="false">
+                            <a class="sidebar-link" href="../ditandai" aria-expanded="false">
                                 <span>
-                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-heart"></i>
                                 </span>
-                                <span class="hide-menu">Rating</span>
+                                <span class="hide-menu-arrow-down">Ditandai</span>
                             </a>
                         </li>
 
@@ -177,16 +171,31 @@
                 </nav>
             </header>
             <!--  Header End -->
-            <div class="container-fluid" style="padding-top: 100px">
+            <div class="container-fluid min-vh-100" style="padding-top: 100px">
                 <div class="row">
                     <div class="col-12">
 
                         <div class="card-body">
                             <div class="d-sm-flex d-block align-items-center justify-content-between mb-9 gap-3">
-                                <a href="./peminjaman" type="button" class="btn btn-primary m-1 flex-grow-1">Dipinjam</a>
-                                <a href="./pengembalian" type="button" class="btn btn-light m-1 text-primary flex-grow-1">Kembalikan</a>
-                                <a href="./rating" type="button" class="btn btn-light m-1 text-primary flex-grow-1">Rating</a>
-
+                                <a href="./proses" type="button" class="btn btn-primary m-1 flex-grow-1">Proses</a>
+                                <a href="./dipinjam" type="button"
+                                    class="btn btn-light text-primary m-1 flex-grow-1">Dipinjam</a>
+                                <a href="./antrian" type="button"
+                                    class="btn btn-light m-1 text-primary flex-grow-1">Antrian</a>
+                                <a href="./selesai" type="button"
+                                    class="btn btn-light m-1 text-primary flex-grow-1">Selesai</a>
+                                    @if (session('success'))                    
+                                    <div class="alert alert-success alert-dismissible fade show mb-0 position-fixed" role="alert">
+                                        {{ session('success') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>              
+                                    @endif
+                                    @if (session('failed'))
+                                    <div class="alert alert-danger alert-dismissible fade show mb-0 position-fixed" role="alert">
+                                        {{ session('failed') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    @endif
                             </div>
                         </div>
 
@@ -194,54 +203,60 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <div class="card w-100">
+                        <div class="card">
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th scope="col">ID Buku</th>
-                                                <th scope="col">Sampul</th>
-                                                <th scope="col">Judul</th>
-                                                <th scope="col">Tipe</th>
-                                                <th scope="col" class="text-center">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="table-group-divider">
-                                            @foreach ($bukus as $buku)
-                                            <tr>
-                                                                                        
-                                                {{-- @for ($i = 0; $i < count($buku->panjang_mengantri_peminjaman()[0]) ; $i++)
-                                               <td>{{ str_replace(['[', ']', '"'], '', $buku->data_mengantri_peminjaman($i)[0]) }}</td>
-                                                @endfor --}}
-                                                
-                                               {{-- <td>{{ str_replace(['[', ']', '"'], '', $buku->panjang_mengantri_peminjaman()[0]) }}</td> --}}
-                                               {{-- <td>{{ str_replace(['[', ']', '"'], '', $buku->data_dipinjam_panjang()) }}</td> --}}
-                                               {{-- <td>{{ $buku->data_dipinjam_panjang() }}</td> --}}
-                                               <td>{{ $buku->judul }}</td>
-
-                                                
-                                                <td>
-                                                    <div class="d-flex justify-content-center"
-                                                        style="max-width: 150px; height: 120px;">
-                                                        <img class="mx-auto mh-100" src="">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="text-primary-emphasis text-decoration-underline"><b></b>
-                                                    </p>
-                                                    <p class="text-body"></p>
-                                                </td>
-                                                <td></td>
-                                                <td>
-                                                    
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                <div class="card bg-transparent">
+                                    <div class="card-body py-0 px-3 d-md-flex text-center">
+                                        <div class="col-md-2">
+                                            <h5 class="fw-semibold">Buku</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h5 class="fw-semibold">Judul</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h5 class="fw-semibold">Tanggal Pengajuan</h5>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5 class="fw-semibold">Aksi</h5>
+                                        </div>
+                                        
+                                    </div>
                                 </div>
-
+                                <div>
+                                    @forelse ($is_mengantri_peminjaman as $buku)
+                                    <div class="card" style="background-color: #e9ecef">
+                                        <div class="card-body p-3 d-md-flex text-center">
+                                            <div class="col-md-2 d-flex justify-content-center"
+                                                style="height: 180px;">
+                                                <a href="../detail/{{ $buku->slug }}">
+                                                <img class="mx-auto mh-100"
+                                                    src="{{ asset('/storage/buku/'. $buku->image) }}"
+                                                    alt="{{ $buku->judul }}">
+                                                </a>                                                
+                                            </div>
+                                            <div class="d-md-flex col-md-3">
+                                                <h3 class="card-title text-truncate">{{ $buku->judul }}</h3>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h3 class="card-title text-truncate">
+                                                    {{ $buku->tanggal_pengajuan_peminjaman }}</h3>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a class="btn btn-danger"
+                                                    href="/batal/mengantri-peminjaman/{{ $buku->slug }}">Batal antri</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @empty
+                                    <div class="card" style="background-color: #e9ecef">
+                                        <div class="card-body p-3 d-flex text-center">
+                                            <div class="col-12 justify-content-center align-content-center" style="min-height: 200px">
+                                                <h3 class="card-title text-truncate">Tidak Ada Transaksi</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforelse
+                                </div>
 
                             </div>
                         </div>

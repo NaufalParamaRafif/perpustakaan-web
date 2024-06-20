@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\tesController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\SiswaDetailController;
 use App\Http\Controllers\DashboardBukuController;
@@ -15,6 +15,7 @@ use App\Http\Controllers\DashboardPenulisController;
 use App\Http\Controllers\DashboardPetugasController;
 use App\Http\Controllers\DashboardCategoryController;
 use App\Http\Controllers\DashboardPenerbitController;
+use App\Http\Controllers\SiswaMenandaiBukuController;
 use App\Http\Controllers\DashboardPenyetujuanPeminjamanController;
 use App\Http\Controllers\DashboardPenyetujuanPengembalianController;
 use App\Http\Controllers\DashboardLaporanTransaksiPeminjamanBukuController;
@@ -31,21 +32,14 @@ use App\Http\Controllers\DashboardLaporanPeminjamanBukuBerlangsungController;
 |
 */
 
-
-
-
-
-
-
-
-
-
 Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/', function () {
         return view('begin');
-    });#
+    })->name('begin');#
 });
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -83,11 +77,18 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:siswa')->group(function () {
         
         Route::resource('/detail', SiswaDetailController::class);        
+        Route::get('/menandai-buku/{slug}', [SiswaMenandaiBukuController::class, 'menandai']);
         Route::get('/mengantri-peminjaman/{slug}', [TransaksiController::class, 'mengantri_peminjaman']);
         Route::get('/mengantri-pengembalian/{slug}', [TransaksiController::class, 'mengantri_pengembalian']);
         Route::get('/batal/mengantri-peminjaman/{slug}', [TransaksiController::class, 'batal_antri_peminjaman']);
         
-        Route::get('/peminjaman', [SiswaTransaksiController::class, 'peminjaman']);
+        Route::get('/proses', [SiswaTransaksiController::class, 'proses']);
+        Route::get('/dipinjam', [SiswaTransaksiController::class, 'dipinjam']);
+        Route::get('/antrian', [SiswaTransaksiController::class, 'antrian']);
+        Route::get('/selesai', [SiswaTransaksiController::class, 'selesai']);
+        Route::get('/ditandai', [SiswaMenandaiBukuController::class, 'index']);
+
+        Route::post('/rating/{slug}', [SiswaDetailController::class, 'rating'])->name('rating');
 
         Route::get('/dashboard/buku', [SiswaDashboardController::class, 'index']);
     });

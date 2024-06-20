@@ -64,13 +64,13 @@ class Buku extends Model
             ->exists();
     }
 
-    public function data_dipinjam_panjang()
-    {
-        $currentUser = Auth::user();
-        $bukus = Buku::where('peminjam_id', $currentUser->id)->get('');
+    // public function data_dipinjam_panjang()
+    // {
+    //     $currentUser = Auth::user();
+    //     $bukus = Buku::where('peminjam_id', $currentUser->id)->get('');
 
-        return $bukus;
-    }
+    //     return $bukus;
+    // }
     // public function data_dipinjam($urut)
     // {
     //     $currentUser = Auth::user();
@@ -97,8 +97,42 @@ class Buku extends Model
             ->exists();
     }
 
+    public function is_ditandai() {
+        $currentUser = Auth::user();
+        return DB::table('user_menandai_buku')
+            ->where('buku_id', $this->id)
+            ->where('user_id', $currentUser->id)
+            ->exists();
+    }
 
-
+    //sudah pernah pinjam
+    public function is_rating() {
+        $currentUser = Auth::user();
+        return DB::table('laporan_transaksi_peminjaman_buku')
+            ->where('buku_id', $this->id)
+            ->where('peminjam_id', $currentUser->id)
+            ->exists();
+    }
+    public function is_sudah_rating() {
+        $currentUser = Auth::user();
+        return DB::table('user_merating_buku')
+            ->where('buku_id', $this->id)
+            ->where('user_id', $currentUser->id)
+            ->exists();
+    }
+    public function is_rating_ratarata(string $slug) {
+        // Mendapatkan ID buku berdasarkan slug
+        $buku = Buku::where('slug', $slug)->firstOrFail();
+    
+        // Menghitung rata-rata nilai rating untuk buku dengan ID tersebut
+        $avgRating = DB::table('user_merating_buku')
+            ->where('buku_id', $buku->id)
+            ->avg('nilai');
+    
+        // Mengembalikan nilai rata-rata rating sebagai desimal
+        return number_format($avgRating, 1, '.', '');
+    }
+    
 
     // for api
     public function is_mengantri_peminjaman_api()

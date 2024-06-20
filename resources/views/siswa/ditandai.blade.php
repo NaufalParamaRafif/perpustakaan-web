@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css" />
 
     <style>
+
+
         .bgb {
             position: fixed;
             top: 0;
@@ -68,7 +70,7 @@
                             <span class="hide-menu">Home</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./buku" aria-expanded="false">
+                            <a class="sidebar-link" href="../dashboard" aria-expanded="false">
                                 <span>
                                     <i class="bi bi-house"></i>
                                 </span>
@@ -80,7 +82,7 @@
                             <span class="hide-menu">Aktifitas</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="../proses" aria-expanded="false">
+                            <a class="sidebar-link" href="./proses" aria-expanded="false">
                                 <span>
                                     <i class="bi bi-journal"></i>
                                 </span>
@@ -92,13 +94,14 @@
                             <span class="hide-menu">Personal</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="../ditandai" aria-expanded="false">
+                            <a class="sidebar-link" href="./ditandai" aria-expanded="false">
                                 <span>
                                     <i class="bi bi-heart"></i>
                                 </span>
                                 <span class="hide-menu-arrow-down">Ditandai</span>
                             </a>
                         </li>
+                        
 
 
                     </ul>
@@ -173,90 +176,92 @@
             <div class="container-fluid">
                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9" style="min-height: 60px">
                     <div class="mb-3 mb-sm-0 d-flex">
-                        <a href="../dashboard">
-                            <i class="bi bi-arrow-left-circle"
-                                style="font-size: 30px; color: white; cursor: pointer;"></i>
-                        </a>
                         <div class="mx-3 justify-content-center align-content-center">
-                            <h4 class="fw-semibold text-white mb-0">Buku</h4>
+                            <h4 class="fw-semibold text-white mb-0">Ditandai</h4>
                         </div>
-
                     </div>
-                    @if (session('success'))
+                    @if (session('success'))                    
                     <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    @endif
-                    @if (session('failed'))
+                    @elseif (session('failed'))
                     <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
                         {{ session('failed') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                    @else
+                    <div></div>
                     @endif
-                    <div>
-
-                    </div>
+                    <div></div>
                 </div>
-                <div class="container mt-4">
-                    <div class="row">
+               
+               
+                    <div class="container">
+                        <div class="row">
+                            @forelse($bukus as $buku)
+                    <div class="col-md-4  mb-3">
+                        <div class="card m-0" style="max-width: 540px;">
+                            <div class="row g-0">
+                                <div class="col-md-4 justify-content-center align-content-center">
+                                    <a href="/detail/{{ $buku->slug }}">
+                                        <img src="{{ asset("storage/buku/$buku->image") }}" class="card-img"
+                                            alt="Image 1">
+                                    </a>
 
-                    </div>
-                </div>
 
-                <div class="container">
-                    <div class="row">
-                        @forelse($bukus as $buku)
-                        <div class="col-md-4 mb-3">
-                            <div class="card m-0" style="max-width: 540px;">
-                                <div class="row g-0">
-                                    <div class="col-lg-4 justify-content-center align-content-center">
+                                </div>
+                                <div class="col-md-8">
+
+                                    <div class="card-body p-3">
                                         <a href="/detail/{{ $buku->slug }}">
-                                            <img src="{{ asset("storage/buku/$buku->image") }}" class="card-img"  alt="Image 1">
+                                            <h5 class="card-title text-truncate">{{ $buku->judul }}</h5>
                                         </a>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="card-body p-3">
-                                            <a href="/detail/{{ $buku->slug }}">
-                                                <h5 class="card-title text-truncate">{{ $buku->judul }}</h5>
-                                            </a>
-                                            <p class="card-text text-truncate">{{ $buku->deskripsi }}
-                                            </p>
-                                            <div class="d-sm-flex d-block align-items-center justify-content-between">
-                                                <div>
-                                                    <a href="/menandai-buku/{{ $buku->slug }}"
-                                                        class="d-inline-flex p-2 align-items-center justify-content-center bg-primary text-white text-decoration-none rounded-circle"
-                                                        style="width: 32px; height: 32px;">
-                                                        <i class="bi bi-{{ $buku->is_ditandai() ? 'heart-fill' : 'heart'}} fs-4"></i>
-                                                    </a>
-                                                </div>
-                                                <div>
-                                                    <p
-                                                        class="text-end card-text text-truncate  {{ $buku->status_ketersediaan ? 'text-success' : 'text-danger'}}">
-                                                        {{ $buku->status_ketersediaan ? 'Tersedia' : 'Tidak Tersedia'}}
-                                                    </p>
-                                                    <p class="card-text text-truncate">
-                                                        @if ($buku->is_rating_ratarata($buku->slug) == 0.0)
-                                                            belum ada rating
-                                                        @else
-                                                            <i class="bi bi-star-fill" style="color: orange"></i>
-                                                            {{ $buku->is_rating_ratarata($buku->slug) }}
-                                                        @endif
-                                                    </p>
-                                                </div>
+                                        <p class="card-text text-truncate">{{ $buku->deskripsi }}
+                                        </p>
+                                        <div class="d-sm-flex d-block align-items-center justify-content-between">
+                                            <div>
+                                                <a href="/menandai-buku/{{ $buku->slug }}"
+                                            class="d-inline-flex p-2 align-items-center justify-content-center bg-primary text-white text-decoration-none rounded-circle"
+                                            style="width: 32px; height: 32px;">
+                                            <i class="bi bi-{{ $buku->is_ditandai() ? 'heart-fill' : 'heart'}} fs-4"></i>
+
+                                        </a>
+                                            </div>
+                                            <div>
+                                                <p
+                                            class="text-end card-text text-truncate  {{ $buku->status_ketersediaan ? 'text-success' : 'text-danger'}}">
+                                            {{ $buku->status_ketersediaan ? 'Tersedia' : 'Tidak Tersedia'}}
+                                        </p>
+                                        <p class="card-text text-truncate">
+                                            @if ($buku->is_rating_ratarata($buku->slug) == 0.0)
+                                                belum ada rating
+                                            @else
+                                                <i class="bi bi-star-fill" style="color: orange"></i>
+                                                {{ $buku->is_rating_ratarata($buku->slug) }}
+                                            @endif
+                                        </p>
                                             </div>
                                         </div>
+                                        
+                                        
                                     </div>
+
                                 </div>
+
                             </div>
                         </div>
-                        @empty
-                        <div style="width: 100%; height: 250px; align-content: center; text-align: center">
-                            <b>Tidak ada data buku</b>
-                        </div>
-                        @endforelse
                     </div>
-                </div>
+                    @empty
+
+                    <div class="text-white fs-5" style="width: 100%; height: 250px; align-content: center; text-align: center"><b>Tidak ada buku yang ditandai</b></div>
+
+                    @endforelse
+                        </div>
+                    </div>
+                    
+                
+              
             </div>
         </div>
     </div>
